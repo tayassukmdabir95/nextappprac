@@ -145,11 +145,7 @@ export default function Home() {
             </p>
           </div>
 
-          <button className="flex w-fit items-center gap-2 rounded border border-zinc-700 px-3 py-2 text-[9px] font-bold uppercase text-zinc-300">
-            Sort By
-            <span className="text-[#ccff00]">Duration</span>
-            <ArrowDown size={11} />
-          </button>
+          
         </div>
 
         {isLoading ? (

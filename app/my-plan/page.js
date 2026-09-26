@@ -10,7 +10,8 @@ import {
   Flame,
   Search,
   Star,
-  Trash2,
+ 
+  X,
 } from "lucide-react";
 
 export default function MyPlanPage() {
@@ -297,7 +298,7 @@ const totalCalories = currentWorkouts.reduce(
                     className="inline-flex items-center justify-center rounded border border-zinc-700 p-2 text-zinc-400 transition hover:border-red-400 hover:text-red-400"
                     aria-label={`Remove ${workout.name}`}
                   >
-                    <Trash2 size={14} />
+                    <X size={14} />
                   </button>
                 </div>
               </article>

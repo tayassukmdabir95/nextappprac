@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import {
   ArrowDown,
   Clock3,
@@ -6,117 +9,6 @@ import {
   Star,
   Dumbbell,
 } from "lucide-react";
-
-const workouts = [
-  {
-    id: 1,
-    name: "BARBELL BENCH PRESS",
-    category: ["CHEST", "ARMS"],
-    equipment: "Barbell, Bench",
-    duration: 25,
-    calories: 180,
-    rating: 4.8,
-  },
-  {
-    id: 2,
-    name: "PULL-UP",
-    category: ["BACK", "ARMS"],
-    equipment: "Pull-up Bar",
-    duration: 15,
-    calories: 120,
-    rating: 4.7,
-  },
-  {
-    id: 3,
-    name: "BACK SQUAT",
-    category: ["LEGS", "CORE"],
-    equipment: "Barbell, Rack",
-    duration: 30,
-    calories: 220,
-    rating: 4.9,
-  },
-  {
-    id: 4,
-    name: "OVERHEAD PRESS",
-    category: ["SHOULDERS", "ARMS"],
-    equipment: "Barbell",
-    duration: 20,
-    calories: 150,
-    rating: 4.7,
-  },
-  {
-    id: 5,
-    name: "DUMBBELL BICEP CURL",
-    category: ["ARMS"],
-    equipment: "Dumbbells",
-    duration: 15,
-    calories: 100,
-    rating: 4.6,
-  },
-  {
-    id: 6,
-    name: "DUMBBELL BICEP CURL",
-    category: ["ARMS"],
-    equipment: "Dumbbells",
-    duration: 15,
-    calories: 105,
-    rating: 4.6,
-  },
-  {
-    id: 7,
-    name: "WALKING-BODY PLANK",
-    category: ["CORE"],
-    equipment: "Bodyweight",
-    duration: 12,
-    calories: 90,
-    rating: 4.5,
-  },
-  {
-    id: 8,
-    name: "DUMBBELL BICEP CURL",
-    category: ["ARMS"],
-    equipment: "Dumbbells",
-    duration: 15,
-    calories: 100,
-    rating: 4.6,
-  },
-  {
-    id: 9,
-    name: "CONVENTIONAL DEADLIFT",
-    category: ["BACK", "LEGS"],
-    equipment: "Barbell",
-    duration: 30,
-    calories: 250,
-    rating: 4.9,
-  },
-  {
-    id: 10,
-    name: "PUSH-UP",
-    category: ["CHEST", "ARMS"],
-    equipment: "Bodyweight",
-    duration: 15,
-    calories: 110,
-    rating: 4.7,
-  },
-  {
-    id: 11,
-    name: "WALKING LUNGE",
-    category: ["LEGS"],
-    equipment: "Dumbbells",
-    duration: 20,
-    calories: 140,
-    rating: 4.8,
-  },
-  {
-    id: 12,
-    name: "RUSSIAN TWIST",
-    category: ["CORE"],
-    equipment: "Medicine Ball",
-    duration: 12,
-    calories: 95,
-    rating: 4.6,
-  },
-];
 
 function WorkoutCard({ workout }) {
   return (
@@ -126,7 +18,7 @@ function WorkoutCard({ workout }) {
     >
       <div className="relative h-44 overflow-hidden bg-zinc-800">
         <img
-          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80"
+          src={workout.image}
           alt={workout.name}
           className="h-full w-full object-cover opacity-80 transition duration-300 group-hover:scale-105"
         />
@@ -134,7 +26,7 @@ function WorkoutCard({ workout }) {
 
       <div className="p-4">
         <div className="mb-2 flex flex-wrap gap-1.5">
-          {workout.category.map((tag) => (
+          {workout.muscleGroups.map((tag) => (
             <span
               key={tag}
               className="rounded-full bg-[#ccff00] px-2 py-0.5 text-[8px] font-black text-black"
@@ -160,7 +52,7 @@ function WorkoutCard({ workout }) {
 
           <span className="flex items-center gap-1">
             <Flame size={11} />
-            {workout.calories} kcal
+            {workout.caloriesBurned} kcal
           </span>
 
           <span className="flex items-center gap-1">
@@ -174,6 +66,30 @@ function WorkoutCard({ workout }) {
 }
 
 export default function Home() {
+  const [workouts, setWorkouts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function getWorkouts() {
+      try {
+        const response = await fetch("/data.json");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch workouts");
+        }
+
+        const data = await response.json();
+        setWorkouts(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    getWorkouts();
+  }, []);
+
   return (
     <div>
       <section className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-12">
@@ -203,11 +119,11 @@ export default function Home() {
             </div>
 
             <div className="relative hidden h-full min-h-[330px] lg:block">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#16181e] via-transparent to-transparent" />
-              <img
-                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1000&q=85"
-                alt="Workout"
-                className="h-full w-full object-cover opacity-70"
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#16181e] via-transparent to-transparent" />
+              <img 
+                src="/banner.png" 
+                className="h-full w-full object-cover opacity-70" 
+                alt="Banner"
               />
             </div>
           </div>
@@ -236,11 +152,17 @@ export default function Home() {
           </button>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {workouts.map((workout) => (
-            <WorkoutCard key={workout.id} workout={workout} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex min-h-64 items-center justify-center">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-zinc-700 border-t-[#ccff00]" />
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {workouts.map((workout) => (
+              <WorkoutCard key={workout.id} workout={workout} />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

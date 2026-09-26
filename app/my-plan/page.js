@@ -70,16 +70,17 @@ export default function MyPlanPage() {
     showToast("Workout marked as done");
   }
 
-  const exercises = plan.length;
-  const totalMinutes = plan.reduce(
-    (total, workout) => total + workout.duration,
-    0
-  );
-  const totalCalories = plan.reduce(
-    (total, workout) => total + workout.caloriesBurned,
-    0
-  );
+const currentWorkouts = activeTab === "plan" ? plan : saved;
 
+const exercises = currentWorkouts.length;
+const totalMinutes = currentWorkouts.reduce(
+  (total, workout) => total + workout.duration,
+  0
+);
+const totalCalories = currentWorkouts.reduce(
+  (total, workout) => total + workout.caloriesBurned,
+  0
+);
   const visibleWorkouts = useMemo(() => {
     const workouts = activeTab === "plan" ? plan : saved;
     const searchText = search.toLowerCase().trim();

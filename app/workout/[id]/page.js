@@ -215,11 +215,11 @@ export default function WorkoutDetailsPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <button
                 onClick={addToPlan}
-                disabled={isPlanFull || isInPlan}
+                disabled={isPlanFull && !isInPlan}
                 className="inline-flex items-center justify-center gap-2 rounded bg-[#ccff00] px-4 py-3 text-xs font-black text-black transition hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400"
               >
                 <CalendarPlus size={15} />
-                {isInPlan ? "Added to today's plan" : "Add to today's plan"}
+                Add to today's plan
               </button>
 
               <button

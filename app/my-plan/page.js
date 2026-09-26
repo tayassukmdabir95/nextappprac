@@ -212,7 +212,7 @@ const totalCalories = currentWorkouts.reduce(
           </div>
         ) : visibleWorkouts.length === 0 ? (
           <div className="flex min-h-72 flex-col items-center justify-center px-4 text-center">
-            <Dumbbell size={26} className="text-[#ccff00]" />
+            
 
             <h2 className="mt-4 font-[var(--font-oswald)] text-2xl font-black uppercase">
               Nothing here yet

@@ -16,6 +16,7 @@ import {
 export default function WorkoutDetailsPage() {
   const params = useParams();
   const [workout, setWorkout] = useState(null);
+  const [plan, setPlan] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [toast, setToast] = useState("");
 
@@ -39,28 +40,32 @@ export default function WorkoutDetailsPage() {
     getWorkout();
   }, [params.id]);
 
+  useEffect(() => {
+    const savedPlan = JSON.parse(localStorage.getItem("fitlog-plan") || "[]");
+    setPlan(savedPlan);
+  }, []);
+
   function showToast(message) {
     setToast(message);
     setTimeout(() => setToast(""), 2500);
   }
 
   function addToPlan() {
-    const savedPlan = JSON.parse(localStorage.getItem("fitlog-plan") || "[]");
-
-    if (savedPlan.some((item) => item.id === workout.id)) {
+    if (plan.some((item) => item.id === workout.id)) {
       showToast("Workout is already in today's plan");
       return;
     }
 
-    if (savedPlan.length >= 5) {
+    if (plan.length >= 5) {
       showToast("Today's plan can only contain five lifts");
       return;
     }
 
-    localStorage.setItem(
-      "fitlog-plan",
-      JSON.stringify([...savedPlan, workout])
-    );
+    const updatedPlan = [...plan, workout];
+
+    setPlan(updatedPlan);
+    localStorage.setItem("fitlog-plan", JSON.stringify(updatedPlan));
+    window.dispatchEvent(new Event("fitlog-updated"));
 
     showToast("Added to today's plan");
   }
@@ -75,10 +80,13 @@ export default function WorkoutDetailsPage() {
       return;
     }
 
+    const updatedSavedWorkouts = [...savedWorkouts, workout];
+
     localStorage.setItem(
       "fitlog-saved",
-      JSON.stringify([...savedWorkouts, workout])
+      JSON.stringify(updatedSavedWorkouts)
     );
+    window.dispatchEvent(new Event("fitlog-updated"));
 
     showToast("Saved for later");
   }
@@ -108,7 +116,6 @@ export default function WorkoutDetailsPage() {
     );
   }
 
-  const plan = JSON.parse(localStorage.getItem("fitlog-plan") || "[]");
   const isPlanFull = plan.length >= 5;
   const isInPlan = plan.some((item) => item.id === workout.id);
 

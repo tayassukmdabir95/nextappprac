@@ -1,11 +1,34 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Dumbbell, Bookmark, ClipboardList } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [planCount, setPlanCount] = useState(0);
+  const [savedCount, setSavedCount] = useState(0);
+
+  useEffect(() => {
+    function updateCounts() {
+      const plan = JSON.parse(localStorage.getItem("fitlog-plan") || "[]");
+      const saved = JSON.parse(localStorage.getItem("fitlog-saved") || "[]");
+
+      setPlanCount(plan.length);
+      setSavedCount(saved.length);
+    }
+
+    updateCounts();
+
+    window.addEventListener("fitlog-updated", updateCounts);
+    window.addEventListener("storage", updateCounts);
+
+    return () => {
+      window.removeEventListener("fitlog-updated", updateCounts);
+      window.removeEventListener("storage", updateCounts);
+    };
+  }, []);
 
   return (
     <nav className="border-b border-zinc-800 bg-[#090a0c]">
@@ -47,8 +70,8 @@ export default function Navbar() {
             className="flex items-center gap-1.5 rounded-full bg-[#ccff00] px-3 py-1.5 text-[10px] font-bold text-black"
           >
             <ClipboardList size={11} />
-            <span className="hidden xs:inline">Plan</span>
-            <span>0</span>
+            <span className="hidden sm:inline">Plan</span>
+            <span>{planCount}</span>
           </Link>
 
           <Link
@@ -56,8 +79,8 @@ export default function Navbar() {
             className="flex items-center gap-1.5 rounded-full border border-zinc-700 px-3 py-1.5 text-[10px] font-bold text-zinc-300"
           >
             <Bookmark size={11} />
-            <span className="hidden xs:inline">Saved</span>
-            <span>0</span>
+            <span className="hidden sm:inline">Saved</span>
+            <span>{savedCount}</span>
           </Link>
         </div>
       </div>
@@ -66,9 +89,7 @@ export default function Navbar() {
         <Link
           href="/"
           className={`rounded-full px-5 py-1 text-[10px] font-bold uppercase ${
-            pathname === "/"
-              ? "bg-[#ccff00] text-black"
-              : "text-zinc-400"
+            pathname === "/" ? "bg-[#ccff00] text-black" : "text-zinc-400"
           }`}
         >
           Workout

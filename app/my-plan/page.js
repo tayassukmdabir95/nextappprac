@@ -8,7 +8,7 @@ import {
   Dumbbell,
   Eye,
   Flame,
-  Search,
+  
   Star,
  
   X,
@@ -183,16 +183,7 @@ const totalCalories = currentWorkouts.reduce(
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <label className="flex items-center gap-2 rounded border border-zinc-700 px-3 py-2">
-              <Search size={13} className="text-zinc-500" />
-
-              <input
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search workouts"
-                className="w-full bg-transparent text-xs text-white outline-none placeholder:text-zinc-600 sm:w-36"
-              />
-            </label>
+  
 
             <select
               value={sortBy}

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
-  ArrowDown,
   Clock3,
   Flame,
   Star,
@@ -72,7 +71,9 @@ export default function Home() {
   useEffect(() => {
     async function getWorkouts() {
       try {
-        const response = await fetch("/data.json");
+        const response = await fetch(
+          "https://api.api-store.workers.dev/api/fitlog"
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch workouts");
@@ -104,9 +105,9 @@ export default function Home() {
                 Train with intent. Log every set.
               </h1>
 
-              <p className="mt-5 max-w-lg text-xs leading-5 text-zinc-400">
+              <p className="mt-5 text-xs leading-5 text-zinc-400">
                 FitLog is a dark, no-nonsense gym companion: pick a lift, lock
-                it into today's plan, and watch the week's work add up.
+                it into today&apos;s plan, and watch the week&apos;s work add up.
               </p>
 
               <a
@@ -119,11 +120,12 @@ export default function Home() {
             </div>
 
             <div className="relative hidden h-full min-h-[330px] lg:block">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#16181e] via-transparent to-transparent" />
-              <img 
-                src="/banner.png" 
-                className="h-full w-full object-cover opacity-70" 
+              <div className="absolute inset-0 bg-gradient-to-r from-[#16181e] via-transparent to-transparent" />
+
+              <img
+                src="/banner.png"
                 alt="Banner"
+                className="h-full w-full object-cover opacity-70"
               />
             </div>
           </div>
@@ -134,18 +136,14 @@ export default function Home() {
         id="library"
         className="mx-auto max-w-6xl scroll-mt-10 px-4 py-10 sm:px-6 sm:py-14"
       >
-        <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <h2 className="font-[var(--font-oswald)] text-2xl font-black uppercase">
-              The Library
-            </h2>
+        <div className="mb-6">
+          <h2 className="font-[var(--font-oswald)] text-2xl font-black uppercase">
+            The Library
+          </h2>
 
-            <p className="mt-1 text-[10px] text-zinc-500">
-              Twelve lifts covering every major muscle group.
-            </p>
-          </div>
-
-          
+          <p className="mt-1 text-[10px] text-zinc-500">
+            Twelve lifts covering every major muscle group.
+          </p>
         </div>
 
         {isLoading ? (

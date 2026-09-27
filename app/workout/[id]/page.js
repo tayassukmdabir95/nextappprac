@@ -23,13 +23,16 @@ export default function WorkoutDetailsPage() {
   useEffect(() => {
     async function getWorkout() {
       try {
-        const response = await fetch("/data.json");
-        const data = await response.json();
-        const selectedWorkout = data.find(
-          (item) => String(item.id) === String(params.id)
+        const response = await fetch(
+          `https://api.api-store.workers.dev/api/fitlog/${params.id}`
         );
 
-        setWorkout(selectedWorkout);
+        if (!response.ok) {
+          throw new Error("Failed to fetch workout");
+        }
+
+        const data = await response.json();
+        setWorkout(data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -219,7 +222,7 @@ export default function WorkoutDetailsPage() {
                 className="inline-flex items-center justify-center gap-2 rounded bg-[#ccff00] px-4 py-3 text-xs font-black text-black transition hover:bg-white disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400"
               >
                 <CalendarPlus size={15} />
-                Add to today's plan
+                Add to today&apos;s plan
               </button>
 
               <button

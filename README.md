@@ -169,5 +169,5 @@ The exact package versions are available in the project's `package.json` file.
 ### 1. Clone the repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd <YOUR_PROJECT_FOLDER>
+[git clone <YOUR_GITHUB_REPOSITORY_URL>](https://github.com/tayassukmdabir95/nextappprac.git)
+
